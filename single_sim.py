@@ -12,7 +12,8 @@ dd = 2 ** Nd  # Distinct decision vectors
 prob = np.ones(dd)  # Probability measure over the opinions
 prob /= np.sum(prob)
 
-voter_vec = choices(np.arange(0, dd), prob, k=Nv)  # Each element represents the perspective of the corresponding voter
+voter_vec = choices(np.arange(0, dd), prob, k=Nv)
+# Each element represents the perspective of the corresponding voter
 
 dec_arr = np.zeros((dd, Nd), dtype=int)  # Decision array has all the dd's
 voter_arr = np.zeros((Nv, Nd), dtype=int)  # Voter Decision array

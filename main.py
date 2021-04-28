@@ -1,9 +1,9 @@
 import numpy as np
 from itertools import combinations
 
-Nd = 4  # This is the number of topic/policies to have a decision about
-Np = 4  # This is the number of parties
-Nv = 100  # This is the number of voters
+Nd = 2  # This is the number of topic/policies to have a decision about
+Np = 3  # This is the number of parties
+Nv = 10  # This is the number of voters
 
 dd = 2 ** Nd  # Distinct decision vectors
 
@@ -11,8 +11,9 @@ dec_arr = np.zeros((dd, Nd), dtype=int)  # Decion array has all the dd's
 
 for i in range(dd):
     dec_arr[i] = np.array(list(np.binary_repr(i, width=Nd)), dtype=int)
+print("dec", dec_arr)
 
-# print (dec_arr)
+## this is a matrix whose one element would be 0/1 depending on if yes/no to the policy
 
 ## Now we make the overlap matrix
 
@@ -22,8 +23,13 @@ for i in range(dd):
     for j in range(dd):
         ovl_mat[i, j] = np.count_nonzero(dec_arr[i] == dec_arr[j])
 
+## np.count_nonzero Counts the number of non-zero values in the array , so basically
+### we loop over all rows of the decision array for and see how much overlap it has with
+### other possible configs, eg [ 0 0 0 1 ] is one row of dec array i.e no to 1st, 2nd and 3rd
+### policy and yes to 4th ,    [ 0 1 0 1] is another possible row of dec array and
+## overlap matrix"s one elements would be 3 as 3 values are same in the two rows
 
-# print (ovl_mat)
+print("over", ovl_mat)
 
 
 ## Given Np parties find the one that wins according to representative democ.
@@ -34,6 +40,7 @@ def winner_uniform(x):
     counter = np.zeros(len(x))
 
     for i in range(dd):
+        print("comp", comp[:, i])
         listy = comp[:, i]
         winner = np.argwhere(listy == np.amax(listy)).flatten()
 
@@ -47,20 +54,14 @@ def winner_uniform(x):
 arr = np.arange(0, dd)
 
 all_combis = np.array(list(combinations(arr, Np)), dtype=int)
-
+### all_combis has vectors of size np and each vecotor is a distinct possible set represtatives
+## ex [ 1 0 3 ] means repr with policy no 1 , 0 and 3 where 1 is [ 001]
+print("all ", all_combis)
 counter = np.zeros(dd)
 for i in range(all_combis.shape[0]):
     parties = all_combis[i]
-    print((winner_uniform(parties)))
+    print("party", parties)
+    # print((winner_uniform(parties)))
     counter[parties] += (winner_uniform(parties))
 
 print(counter)
-
-
-
-
-
-
-
-
-
