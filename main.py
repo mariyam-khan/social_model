@@ -11,7 +11,6 @@ dec_arr = np.zeros((dd, Nd), dtype=int)  # Decion array has all the dd's
 
 for i in range(dd):
     dec_arr[i] = np.array(list(np.binary_repr(i, width=Nd)), dtype=int)
-print("dec", dec_arr)
 
 ## this is a matrix whose one element would be 0/1 depending on if yes/no to the policy
 
@@ -56,7 +55,7 @@ arr = np.arange(0, dd)
 all_combis = np.array(list(combinations(arr, Np)), dtype=int)
 ### all_combis has vectors of size np and each vecotor is a distinct possible set represtatives
 ## ex [ 1 0 3 ] means repr with policy no 1 , 0 and 3 where 1 is [ 001]
-print("all ", all_combis)
+
 counter = np.zeros(dd)
 for i in range(all_combis.shape[0]):
     parties = all_combis[i]
