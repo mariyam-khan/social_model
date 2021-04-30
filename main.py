@@ -64,3 +64,13 @@ for i in range(all_combis.shape[0]):
     counter[parties] += (winner_uniform(parties))
 
 print(counter)
+
+
+## TODO
+# 1. Write a code for direct democracy.
+# 2. Write a code for direct and representative together i.e
+# Choose representatives using direct democracy and the choose best.
+# direct democracy - case where per polocy most famous policy vector
+# direct dem - best policy within voter policies
+# direct dem - best policy within policy vector even if it is not in the population
+

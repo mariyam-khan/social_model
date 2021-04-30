@@ -14,10 +14,10 @@ from itertools import combinations
 # checks the overlap with another decision vector ( ex [ Y Y ] and [ Y N ]  have 1 overlap.
 # How is a party defined? IF there are let us say 3 parties and 2 policies then we will take
 # all ways to have 3 parties choosing from 4 distinct policy vectors i.e 4 choose 3
-# After this we jst see which party has maximum overlap with all the other voter"s decision vectors.
+# After this we just see which party has maximum overlap with all the other voter"s decision vectors.
 
 #########
-Nd = 3  # This is the number of topic to have a decision about
+Nd = 2  # This is the number of topic to have a decision about
 Np = 2  # This is the number of parties
 Nv = 10  # This is the number of voters
 
@@ -69,14 +69,46 @@ parties = np.array([0, 1, 6], dtype=int)
 
 print(winner_rep(parties, voter_vec))
 
-counter = np.zeros(len(parties))
 
-for i in range(10):
-    np.random.seed()
-    vv = choices(np.arange(0, dd), prob, k=Nv)
-    ans = winner_rep(parties, vv)
+def direct_democracy(voter_vector):
+    total = np.zeros(dd)
+    best_policies = []
+    freq = np.zeros(dd)
+    for a in range(dd):
+        freq[a] = np.count_nonzero(voter_vector == a)
+    for a in range(dd):
+        for b in range(dd):
+            ovl_mat[a, b] = np.count_nonzero(dec_arr[a] == dec_arr[b])
+    max_value = np.dot(ovl_mat[0, :], freq)
+    print("oval",ovl_mat[0, :] )
+    print("freq", freq)
+    for c in range(dd):
+        total[c] = np.dot(ovl_mat[c, :], freq)
+        if total[c] >= max_value:
+            max_value = total[c]
+    for d in range(dd):
+        if total[d] == max_value:
+            best_policies.append(d)
+    return best_policies
 
-    winners = np.argwhere(ans == np.amax(ans)).flatten()
-    counter[winners] += 1. / len(winners)
 
-print(counter)
+direct_democracy(np.array([0, 2, 1, 1, 0, 3, 1, 3, 0, 0]))
+
+
+def representative_democracy(Nd1, Np1, Nv1):
+    dd1 = 2 ** Nd1  # Distinct decision vectors
+    representatives = np.zeros(Np1)
+    prob1 = np.ones(dd1)  # Probability measure over the opinions
+    prob1 /= np.sum(prob1)
+
+    voter_vec1 = choices(np.arange(0, dd1), prob1, k=Nv1)
+    new_arrays = np.array_split(voter_vec1, Np1, axis=0)
+    for a in range(len(new_arrays)):
+        print("dd", direct_democracy(new_arrays[a]))
+        representatives[a] = direct_democracy(new_arrays[a])[0]
+    print("rep", representatives)
+    winner = winner_rep(representatives, voter_vec1)
+    print("winner", winner)
+
+
+representative_democracy(2, 3, 10)
