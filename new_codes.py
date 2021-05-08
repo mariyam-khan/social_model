@@ -1,7 +1,7 @@
 import numpy as np
 from random import choices
 
-# summary of the entire code.
+# summary of the entire code. Yeh hai mera change.
 # You have a no of policies you want to make a decision about (say 2 ) , you are lets say 10 people
 # so 10 voters in total. In the code you will store all possible distinct decisions you can have to
 # to a policy. In our example we will have [ Y Y ], [ Y N ], [ N Y ], [ N N ] , this is dd. Now you
