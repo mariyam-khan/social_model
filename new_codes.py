@@ -1,7 +1,7 @@
 import numpy as np
 from random import choices
 
-# summary of the entire code. Yeh hai mera change.
+# summary of the entire code.
 # You have a no of policies you want to make a decision about (say 2 ) , you are lets say 10 people
 # so 10 voters in total. In the code you will store all possible distinct decisions you can have to
 # to a policy. In our example we will have [ Y Y ], [ Y N ], [ N Y ], [ N N ] , this is dd. Now you
@@ -59,7 +59,7 @@ def representative_democracy_voter(Np):
     representatives = np.zeros(Np)
     new_arrays = np.array_split(voter_vec, Np, axis=0)
     for a in range(len(new_arrays)):
-        representatives[a] = direct_democracy_voter(new_arrays[a])[0]
+        representatives[a] = direct_democracy_1(new_arrays[a])[0]
     print("rep", representatives)
     representatives = np.array(representatives, dtype=int)
 
@@ -71,7 +71,7 @@ def representative_democracy_policy(Np):
     representatives = np.zeros(Np)
     new_arrays = np.array_split(voter_vec, Np, axis=0)
     for a in range(len(new_arrays)):
-        representatives[a] = direct_democracy_voter(new_arrays[a])[0]
+        representatives[a] = direct_democracy_1(new_arrays[a])[0]
     print("rep", representatives)
     representatives = np.array(representatives, dtype=int)
 
@@ -80,9 +80,9 @@ def representative_democracy_policy(Np):
 
 
 ### What follows now are different models of chosing the best policy using direct democracy
+## direct_democracy_1 gives most famous policy even if it doesnot belong in voting population
 
-
-def direct_democracy_voter(voter_vector):
+def direct_democracy_1(voter_vector):
     total = np.zeros(dd)
     best_policies = []
     freq = np.zeros(dd)
@@ -108,26 +108,38 @@ def direct_democracy_voter(voter_vector):
     return best_policies
 
 
-def direct_democracy_policy(dd):
-    total = np.zeros(dd)
+## direct_democracy_2 gives most famous policy only if it belongs in voting population
+
+def direct_democracy_2(voter_vector):
     best_policies = []
+    voter_policies = []
     freq = np.zeros(dd)
     for a in range(dd):
-        freq[a] = np.count_nonzero(dec_arr == a)
-    for a in range(dd):
-        for b in range(dd):
-            ovl_mat[a, b] = np.count_nonzero(dec_arr[a] == dec_arr[b])
-    max_value = np.dot(ovl_mat[0, :], freq)
-    for c in range(dd):
-        total[c] = np.dot(ovl_mat[c, :], freq)
+        freq[a] = np.count_nonzero(voter_vector == a)
+        if freq[a] != 0.0:
+            voter_policies.append(a)
+    dd_new = len(voter_policies)
+    p = np.where(freq != 0)
+    freq_new = freq[p]
+    total = np.zeros(dd_new)
+    dec_arr_new = np.zeros((dd_new, Nd), dtype=int)
+    for i in range(dd_new):
+        dec_arr_new[i] = np.array(list(np.binary_repr(voter_policies[i], width=Nd)), dtype=int)
+
+    for a in range(dd_new):
+        for b in range(dd_new):
+            ovl_mat[a, b] = np.count_nonzero(dec_arr_new[a] == dec_arr_new[b])
+    max_value = np.dot(ovl_mat[0, :], freq_new)
+    for c in voter_policies:
+        total[c] = np.dot(ovl_mat[c, :], freq_new)
         if total[c] >= max_value:
             max_value = total[c]
-    for d in range(dd):
+    for d in range(dd_new):
         if total[d] == max_value:
             best_policies.append(d)
     return best_policies
 
 
 voter_vector = np.array(voter_vec)
-direct_democracy_voter(voter_vector)
+direct_democracy_2(voter_vector)
 # representative_democracy_voter(Np)
