@@ -60,7 +60,6 @@ counter = np.zeros(dd)
 for i in range(all_combis.shape[0]):
     parties = all_combis[i]
     print("party", parties)
-    # print((winner_uniform(parties)))
     counter[parties] += (winner_uniform(parties))
 
 print(counter)
@@ -70,7 +69,8 @@ print(counter)
 # 1. Write a code for direct democracy.
 # 2. Write a code for direct and representative together i.e
 # Choose representatives using direct democracy and the choose best.
-# direct democracy - case where per polocy most famous policy vector
+# direct democracy - case where per policy most famous policy vector
+# direct democracy most famous policies and then policy vector
 # direct dem - best policy within voter policies
 # direct dem - best policy within policy vector even if it is not in the population
 
